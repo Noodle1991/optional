@@ -2,7 +2,6 @@
 
 #include <cstdint>
 #include <exception>
-#include <iostream> //можно не писать,но почему бы не написать
 #include "type_traits"
 
 namespace bmstu {
@@ -15,6 +14,7 @@ namespace bmstu {
     template<typename T>
     class optional {
     public:
+
         optional() = default;
 
         optional(const T &value) {
@@ -51,7 +51,7 @@ namespace bmstu {
             return *this;
         }
 
-        optional &operator=(T &&value) {
+        optional &operator=(const T &&value) {
             if (is_initialized_) {
                 this->value() = std::move(value);
             } else {
@@ -78,7 +78,7 @@ namespace bmstu {
             return *this;
         }
 
-        optional &operator=(optional &&value) {
+        optional &operator=(const optional &&value) {
             if (is_initialized_ && value.is_initialized_) {
                 this->value() = std::move(value.value());
             } else if (!is_initialized_ && value.is_initialized_) {
@@ -152,7 +152,7 @@ namespace bmstu {
         }
 
     private:
-        alignas(T) std::uint8_t data_[sizeof(T)];//тут не понееел, есть беззнаковый 8-битный тип в пространстве std и в cstdint,разницы нету,, ведь?
+        alignas(T) std::uint8_t data_[sizeof(T)];//тут не понееел, есть беззнаковый 8-битный тип и в пространстве std и в cstdint,разницы нету,, ведь?
         bool is_initialized_ = false;
     };
 }
